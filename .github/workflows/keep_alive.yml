@@ -1,1 +1,27 @@
 # GitHub Action to keep Supabase awake
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    # Runs automatically every day at 12:00 UTC
+    - cron: '0 12 * * *'
+  workflow_dispatch: # Allows you to manually click a button in GitHub to test it
+
+jobs:
+  ping-database:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          echo "Pinging Supabase b2b_contracts table to prevent project pause..."
+          
+          # We make a silent read request for exactly 1 row to prove activity
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_KEY" \
+            "$SUPABASE_URL/rest/v1/b2b_contracts?select=trade_id&limit=1")
+            
+          echo "Ping complete. Supabase responded with HTTP Status: $HTTP_STATUS"
