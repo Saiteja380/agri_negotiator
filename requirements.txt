@@ -1,0 +1,10 @@
+streamlit
+fastapi
+uvicorn
+crewai
+langchain-google-genai
+supabase
+geopy
+requests
+pydantic
+python-dotenv

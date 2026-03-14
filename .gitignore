@@ -1,0 +1,7 @@
+# Environments
+venv/
+__pycache__/
+
+# Secrets (NEVER PUSH API KEYS)
+.env
+.vscode/
