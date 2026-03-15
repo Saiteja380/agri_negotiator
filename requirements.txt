@@ -1,10 +1,13 @@
-streamlit
 fastapi
 uvicorn
 crewai
 langchain-google-genai
-supabase
-geopy
-requests
 pydantic
+supabase
+requests
 python-dotenv
+geopy
+pandas
+streamlit
+pydeck
+streamlit-lottie

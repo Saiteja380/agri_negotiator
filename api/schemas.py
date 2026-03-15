@@ -17,12 +17,12 @@ class NegotiationRequest(BaseModel):
 # ==========================================
 class NegotiationResult(BaseModel):
     market_baseline_price: float = Field(..., description="The Agmarknet reference price PER TON.")
-    farmer_quote: float = Field(..., description="Final demanded crop price PER TON by the Farmer.")
-    buyer_quote: float = Field(..., description="Final offered crop price PER TON by the Buyer.")
+    farmer_quote_per_ton: float = Field(..., description="Final demanded crop price PER TON by the Farmer.")
+    buyer_quote_per_ton: float = Field(..., description="Final offered crop price PER TON by the Buyer.")
     
     transporter_per_km_rate: float = Field(..., description="Freight rate PER KILOMETER calculated by the Transporter.")
-    transporter_quote: float = Field(..., description="TOTAL flat freight rate for the entire truck journey (NOT per ton).")
+    weather_hazard_premium: float = Field(..., description="The extra flat amount added due to bad weather. Output 0.0 if none.")
+    transporter_flat_freight: float = Field(..., description="TOTAL flat freight rate for the entire truck journey (NOT per ton).")
     
-    final_accepted_price: float = Field(..., description="The mathematically agreed CROP price PER TON (excluding transport).")
-    contract_text: str = Field(..., description="The formal legal text of the agreement including the execution date.")
+    final_accepted_price_per_ton: float = Field(..., description="The mathematically agreed CROP price PER TON (excluding transport).")
     agent_reasoning_log: str = Field(..., description="Explainable AI (XAI) log detailing the math and unit breakdown.")

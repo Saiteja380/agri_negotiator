@@ -6,12 +6,13 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 load_dotenv()
 
 # ==========================================
-# 1. INITIALIZE THE GEMINI ENGINE (WITH BACKOFF SHIELD)
+# 1. INITIALIZE THE GEMINI ENGINE (V1 STABLE)
 # ==========================================
+# Using the verified 2.5 Flash model from the test script
 gemini_llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash-lite", 
+    model="gemini-2.5-flash", 
     temperature=0.5,
-    max_retries=10  # <--- THE SHIELD: Automatically waits and retries if Google limits it
+    max_retries=10
 )
 
 class AgriAgents:
