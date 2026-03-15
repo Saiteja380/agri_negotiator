@@ -37,7 +37,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # ==========================================
-# 2. ASSETS & HELPERS
+# 2. ASSETS & DYNAMIC DATA HELPERS
 # ==========================================
 def load_lottie(url):
     try:
@@ -56,14 +56,32 @@ def get_coordinates(city_name):
     except: 
         return (0.0, 0.0)
 
+@st.cache_data(ttl=3600) # Cache for 1 hour to prevent API throttling
+def load_dropdown_options():
+    try:
+        # Request data from our FastAPI backend running in the same Docker container
+        response = requests.get("http://127.0.0.1:8000/api/v1/reference-data", timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            if data.get("states") and data.get("commodities"):
+                return data["states"], data["commodities"]
+    except Exception as e:
+        print(f"Could not load dynamic lists: {e}")
+    
+    # Safe fallback if API fails
+    return ["Telangana", "Maharashtra", "Uttar Pradesh", "Punjab", "Karnataka"], ["Rice", "Tomato", "Potato", "Wheat", "Onion"]
+
+available_states, available_commodities = load_dropdown_options()
+
 # ==========================================
 # 3. SIDEBAR PARAMETERS
 # ==========================================
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/2329/2329094.png", width=100)
 st.sidebar.title("Trade Control")
 
-commodity = st.sidebar.selectbox("Commodity", ["Rice", "Tomato", "Potato", "Wheat", "Onion"])
-state = st.sidebar.selectbox("State", ["Telangana", "Maharashtra", "Uttar Pradesh", "Punjab", "Karnataka"])
+# Now using the dynamic lists
+commodity = st.sidebar.selectbox("Commodity", available_commodities)
+state = st.sidebar.selectbox("State", available_states)
 origin_city = st.sidebar.text_input("Origin", "Karimnagar")
 destination_city = st.sidebar.text_input("Destination", "Nalgonda")
 volume = st.sidebar.number_input("Volume (Tons)", value=2.37)
@@ -191,8 +209,6 @@ if negotiate_btn:
             flow_placeholder.empty()
             status_text.error("🚫 API Quota Exhausted")
             st.warning("The Gemini Free Tier allows 15 requests per minute. Please wait for the cooldown.")
-            
-            # Simple UI text placeholder instead of full sleep lock
             st.info("⏱️ Cooldown active. Please wait 60 seconds before initiating a new trade.")
 
         else:
