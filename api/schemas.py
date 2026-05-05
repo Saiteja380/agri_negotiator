@@ -1,8 +1,5 @@
 from pydantic import BaseModel, Field
 
-# ==========================================
-# 1. INPUT SCHEMA (Frontend -> Backend)
-# ==========================================
 class NegotiationRequest(BaseModel):
     commodity: str = Field(..., description="The crop being traded, e.g., Potato")
     state: str = Field(..., description="State for Agmarknet data, e.g., Uttar Pradesh")
@@ -12,9 +9,6 @@ class NegotiationRequest(BaseModel):
     end_lat: float = Field(..., description="Destination Latitude")
     end_lon: float = Field(..., description="Destination Longitude")
 
-# ==========================================
-# 2. OUTPUT SCHEMA (AI Engine -> Database)
-# ==========================================
 class NegotiationResult(BaseModel):
     market_baseline_price: float = Field(..., description="The Agmarknet reference price PER TON.")
     farmer_quote_per_ton: float = Field(..., description="Final demanded crop price PER TON by the Farmer.")

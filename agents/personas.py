@@ -1,21 +1,15 @@
 import os
 from dotenv import load_dotenv
 from crewai import Agent
-from langchain_google_genai import ChatGoogleGenerativeAI
 
 load_dotenv()
 
-# ==========================================
-# 1. INITIALIZE THE GEMINI ENGINE (V1 STABLE)
-# ==========================================
-# Using the verified 2.5 Flash model from the test script
-gemini_llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash", 
-    temperature=0.5,
-    max_retries=10
-)
-
 class AgriAgents:
+    def __init__(self):
+        # Native CrewAI/LiteLLM integration bypasses LangChain/Pydantic conflicts
+        # Ensure GEMINI_API_KEY is in your environment variables
+        self.llm_model = "gemini/gemini-2.5-flash"
+
     def farmer_agent(self, baseline_price: float) -> Agent:
         return Agent(
             role='FPO Representative (Seller)',
@@ -26,7 +20,7 @@ class AgriAgents:
                 "You refuse to take a loss. You must factor in the 'Hamali' (loading) charges. "
                 "You want to close the deal, but will hold your ground against lowballs."
             ),
-            llm=gemini_llm,
+            llm=self.llm_model,
             verbose=True,
             allow_delegation=False
         )
@@ -40,7 +34,7 @@ class AgriAgents:
                 f"The current weather is '{weather}'. If there is extreme heat or rain, "
                 "spoilage will be high, so you aggressively drive the price down as a risk buffer."
             ),
-            llm=gemini_llm,
+            llm=self.llm_model,
             verbose=True,
             allow_delegation=False
         )
@@ -55,7 +49,7 @@ class AgriAgents:
                 f"If the weather '{weather}' indicates monsoons or heat, add a 5-10% hazard premium. "
                 "You only provide the freight quote; you do not negotiate the crop price."
             ),
-            llm=gemini_llm,
+            llm=self.llm_model,
             verbose=True,
             allow_delegation=False
         )
@@ -69,7 +63,7 @@ class AgriAgents:
                 "You calculate the final Landed Price. If parties are deadlocked, enforce the mathematical median. "
                 "Your final output MUST be perfectly structured data matching the database schema."
             ),
-            llm=gemini_llm,
+            llm=self.llm_model,
             verbose=True,
             allow_delegation=False
         )
