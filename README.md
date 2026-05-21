@@ -1,3 +1,13 @@
+---
+title: Agri Negotiator MVP
+emoji: 🌾
+colorFrom: green
+colorTo: blue
+sdk: streamlit
+app_file: app.py
+pinned: false
+---
+
 ```mermaid
 graph TD
     %% Styling
