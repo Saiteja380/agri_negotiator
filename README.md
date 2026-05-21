@@ -1,3 +1,4 @@
+```mermaid
 graph TD
     %% Styling
     classDef ui fill:#0072ff,stroke:#fff,stroke-width:2px,color:#fff;
@@ -35,3 +36,4 @@ graph TD
     MathGuard -->|Verified Contract Payload| Router
     Router -->|JSON 200 OK| UI
     Supabase:::db -.->|State Persistence| DB_Link
+```
